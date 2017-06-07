@@ -1,2 +1,7 @@
 <!--The whole content below can be removed with the new code.-->
-<h1>@ngrx/store Introduction - Setting Up The First Reducer</h1>
+<h3>@ngrx/store Party Planner</h3>
+<person-input (addPerson)="addPerson($event)">
+</person-input>
+<person-list [people]="people" (addGuest)="addGuest($event)" (removeGuest)="removeGuest($event)" (removePerson)="removePerson($event)"
+    (toggleAttending)="toggleAttending($event)">
+</person-list>
