@@ -14,11 +14,12 @@ import { Store } from '@ngrx/store';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnDestroy {
+// export class AppComponent implements OnDestroy {
+export class AppComponent {
   title = 'app';
 
   public people;
-  private subscription;
+  // private subscription;
 
   constructor(
     private _store: Store<any>
@@ -27,11 +28,20 @@ export class AppComponent implements OnDestroy {
       demonstrating use without the async pipe,
       we will explore the async pipe in the next lesson
     */
-    this.subscription = this._store
-      .select('people')
-      .subscribe(people => {
-        this.people = people;
-      });
+    // this.people = this._store
+    //   .select('people')
+    //   .subscribe(people => {
+    //     this.people = people;
+    //   });
+
+    /*
+      Observable of people, utilzing the async pipe
+      in our templates this will be subscribed to, with
+      new values being dispayed in our template.
+      Unsubscribe wil be called automatically when component
+      is disposed.
+    */
+    this.people = this._store.select('people');
   }
   // all state-changing actions get dispatched to and handled by reducers
   addPerson(name) {
@@ -57,7 +67,7 @@ export class AppComponent implements OnDestroy {
     if you do not use async pipe and create manual subscriptions
     always remember to unsubscribe in ngOnDestroy
   */
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
+  // ngOnDestroy() {
+  //   this.subscription.unsubscribe();
+  // }
 }
