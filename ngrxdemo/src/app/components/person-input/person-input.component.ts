@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   OnInit,
@@ -9,7 +10,8 @@ import {
   // tslint:disable-next-line:component-selector
   selector: 'person-input',
   templateUrl: './person-input.component.html',
-  styleUrls: ['./person-input.component.css']
+  styleUrls: ['./person-input.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PersonInputComponent {
   @Output() addPerson = new EventEmitter();
