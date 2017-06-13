@@ -22,7 +22,7 @@ export class PersonListComponent implements OnInit {
   @Input() people;
 
   // for now, we will pass filter down and apply
-  @Input() filter;
+  // @Input() filter;
 
   @Output() addGuest = new EventEmitter();
   @Output() removeGuest = new EventEmitter();

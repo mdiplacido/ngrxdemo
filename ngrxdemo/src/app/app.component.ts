@@ -20,11 +20,13 @@ import { Store } from '@ngrx/store';
 export class AppComponent {
   title = 'app';
 
-  public people: Observable<any>;
-  public filter: Observable<any>;
-  public attending: Observable<any[]>;
-  public guests: Observable<number>;
+  // public people: Observable<any>;
+  // public filter: Observable<any>;
+  // public attending: Observable<any[]>;
+  // public guests: Observable<number>;
   // private subscription;
+
+  public model: Observable<any>;
 
   constructor(
     private _store: Store<any>
@@ -46,17 +48,29 @@ export class AppComponent {
       Unsubscribe wil be called automatically when component
       is disposed.
     */
-    this.people = this._store.select('people');
+    // this.people = this._store.select('people');
 
-      /*
-        this is a naive way to handle projecting state, we will discover a better
-        Rx based solution in next lesson
-      */
-    this.filter = _store.select('partyFilter');
-    this.attending = this.people.map(p => p.filter(person => person.attending));
-    this.guests = this.people
-      .map(p => p.map(person => person.guests)
-        .reduce((acc, curr) => acc + curr, 0));
+    //   /*
+    //     this is a naive way to handle projecting state, we will discover a better
+    //     Rx based solution in next lesson
+    //   */
+    // this.filter = _store.select('partyFilter');
+    // this.attending = this.people.map(p => p.filter(person => person.attending));
+    // this.guests = this.people
+    //   .map(p => p.map(person => person.guests)
+    //     .reduce((acc, curr) => acc + curr, 0));
+
+    this.model = Observable.combineLatest(
+      this._store.select('people'),
+      this._store.select('partyFilter'),
+      (people: Array<any>, filter: any) => {
+        return {
+          total: people.length,
+          people: people.filter(filter),
+          attending: people.filter(person => person.attending).length,
+          guests: people.reduce((acc, curr) => acc + curr.guests, 0)
+        }
+    });
   }
   // all state-changing actions get dispatched to and handled by reducers
   addPerson(name) {
