@@ -1,3 +1,4 @@
+import { partyModel, percentAttending } from "./selectors/party-model-selector";
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
 import {
@@ -10,6 +11,7 @@ import {
 import { Component, OnDestroy } from '@angular/core';
 import { id } from './id';
 import { Store } from '@ngrx/store';
+
 
 @Component({
   selector: 'app-root',
@@ -27,6 +29,7 @@ export class AppComponent {
   // private subscription;
 
   public model: Observable<any>;
+  public percentAttendance: Observable<any>;
 
   constructor(
     private _store: Store<any>
@@ -60,17 +63,26 @@ export class AppComponent {
     //   .map(p => p.map(person => person.guests)
     //     .reduce((acc, curr) => acc + curr, 0));
 
+    // this.model = Observable.combineLatest(
+    //   this._store.select('people'),
+    //   this._store.select('partyFilter'),
+    //   (people: Array<any>, filter: any) => {
+    //     return {
+    //       total: people.length,
+    //       people: people.filter(filter),
+    //       attending: people.filter(person => person.attending).length,
+    //       guests: people.reduce((acc, curr) => acc + curr.guests, 0)
+    //     }
+    // });
+
     this.model = Observable.combineLatest(
-      this._store.select('people'),
-      this._store.select('partyFilter'),
-      (people: Array<any>, filter: any) => {
-        return {
-          total: people.length,
-          people: people.filter(filter),
-          attending: people.filter(person => person.attending).length,
-          guests: people.reduce((acc, curr) => acc + curr.guests, 0)
-        }
-    });
+          _store.select('people'),
+          _store.select('partyFilter')
+        )
+        // extracting party model to selector
+        .let(partyModel());
+
+    this.percentAttendance = _store.let(percentAttending());
   }
   // all state-changing actions get dispatched to and handled by reducers
   addPerson(name) {
