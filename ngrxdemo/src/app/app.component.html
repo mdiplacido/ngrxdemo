@@ -1,11 +1,23 @@
 <!--The whole content below can be removed with the new code.-->
 <h3>@ngrx/store Party Planner</h3>
-<person-input (addPerson)="addPerson($event)">
-</person-input>
-
 <!--<person-list [people]="people" (addGuest)="addGuest($event)" (removeGuest)="removeGuest($event)" (removePerson)="removePerson($event)"
     (toggleAttending)="toggleAttending($event)">-->
 
-<person-list [people]="people | async" (addGuest)="addGuest($event)" (removeGuest)="removeGuest($event)" (removePerson)="removePerson($event)"
+<!--<person-list [people]="people | async" (addGuest)="addGuest($event)" (removeGuest)="removeGuest($event)" (removePerson)="removePerson($event)"
     (toggleAttending)="toggleAttending($event)">
+</person-list>-->
+
+<party-stats [invited]="(people | async)?.length" [attending]="(attending | async)?.length" [guests]="(guests | async)">
+</party-stats>
+
+<filter-select (updateFilter)="updateFilter($event)">
+</filter-select>
+
+<person-input (addPerson)="addPerson($event)">
+</person-input>
+
+<person-list [people]="people | async" [filter]="filter | async" (addGuest)="addGuest($event)" (removeGuest)="removeGuest($event)"
+    (removePerson)="removePerson($event)" (toggleAttending)="toggleAttending($event)">
 </person-list>
+
+{{ (filter | async)?.toString() }}

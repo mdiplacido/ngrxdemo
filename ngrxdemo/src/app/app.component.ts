@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/Rx';
 import {
   ADD_GUEST,
   ADD_PERSON,
@@ -18,7 +20,10 @@ import { Store } from '@ngrx/store';
 export class AppComponent {
   title = 'app';
 
-  public people;
+  public people: Observable<any>;
+  public filter: Observable<any>;
+  public attending: Observable<any[]>;
+  public guests: Observable<number>;
   // private subscription;
 
   constructor(
@@ -42,6 +47,16 @@ export class AppComponent {
       is disposed.
     */
     this.people = this._store.select('people');
+
+      /*
+        this is a naive way to handle projecting state, we will discover a better
+        Rx based solution in next lesson
+      */
+    this.filter = _store.select('partyFilter');
+    this.attending = this.people.map(p => p.filter(person => person.attending));
+    this.guests = this.people
+      .map(p => p.map(person => person.guests)
+        .reduce((acc, curr) => acc + curr, 0));
   }
   // all state-changing actions get dispatched to and handled by reducers
   addPerson(name) {
@@ -63,6 +78,11 @@ export class AppComponent {
   toggleAttending(id) {
     this._store.dispatch({ type: TOGGLE_ATTENDING, payload: id })
   }
+
+  updateFilter(filter) {
+    this._store.dispatch({ type: filter })
+  }
+
   /*
     if you do not use async pipe and create manual subscriptions
     always remember to unsubscribe in ngOnDestroy
