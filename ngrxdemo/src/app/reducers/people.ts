@@ -4,9 +4,9 @@ import {
     REMOVE_GUEST,
     REMOVE_PERSON,
     TOGGLE_ATTENDING
-    } from './../actions/actions';
+} from './../actions/actions';
 
-const details = (state, action) => {
+export function details(state, action) {
     switch (action.type) {
         case ADD_GUEST:
             if (state.id === action.payload) {
@@ -30,7 +30,7 @@ const details = (state, action) => {
     }
 }
 // remember to avoid mutation within reducers
-export const people = (state = [], action) => {
+export function people(state = [], action) {
     switch (action.type) {
         case ADD_PERSON:
             return [
